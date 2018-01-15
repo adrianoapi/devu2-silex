@@ -1,6 +1,7 @@
 <?php
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 require __DIR__ . '/../vendor/autoload.php';
 $app = new Silex\Application();
@@ -16,7 +17,7 @@ $app->get('/hello-world', function() {
 
 $app->get('/home', function() {
     return NULL .
-            '<form method="get" action="/get-name">' .
+            '<form method="POST" action="/home-response">' .
             '   <input type="text" name="nome" value="">' .
             '   <button type="submit">Enviar</button>' .
             '</form>';
@@ -24,14 +25,26 @@ $app->get('/home', function() {
 
 // Request com GET
 $app->get('/get-name', function(Request $request) {
-    $name = $request->get('nome','sem nome');
-    return "Post enviado com sucesso! <br> $name";
+//    $name = $request->get('nome','sem nome');
+    $data = $request->query->all();
+    print_r($data);
+    die();
 });
 
 // Request com POST
 $app->post('/home', function(Request $request) {
-    $name = $request->get('nome','sem nome');
+//    $name = $request->get('nome','sem nome');
+    $data = $request->request->all();
+//    print_r($data);
+//    die();
     return "Post enviado com sucesso! <br> $name";
+});
+
+// Request com Response
+$app->post('/home-response', function(Request $request) {
+    $name = $request->get('nome', 'sem nome');
+//    return "Post => Name: $name";
+    return new Response("Post => Name: $name", 404);
 });
 
 
