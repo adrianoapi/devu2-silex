@@ -47,5 +47,18 @@ $app->post('/home-response', function(Request $request) {
     return new Response("Post => Name: $name", 404);
 });
 
+// Parametros de rota
+$app->get('/inicial', function() {
+    return NULL .
+            '<form method="POST" action="/inicial/parametro">' .
+            '   <input type="text" name="nome" value="">' .
+            '   <button type="submit">Enviar</button>' .
+            '</form>';
+});
+
+$app->post('/inicial/{parametro1}', function(Request $request, $parametro1) {
+    $name = $request->get('nome', 'sem nome');
+    return new Response("Post <br/>name: $name<br/>Parametro1: $parametro1", 202);
+});
 
 $app->run();
