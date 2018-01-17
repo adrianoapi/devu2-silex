@@ -19,7 +19,8 @@
   "homepage": "https://github.com/adrianometalslug/devu2-silex#readme",
   "devDependencies": {
     "browser-sync": "^2.23.5",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-less": "^3.3.0"
   },
   "dependencies": {
     "bootstrap": "^3.3.7",
