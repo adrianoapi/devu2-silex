@@ -15,12 +15,22 @@ class ViewRenderer
 
     public function render($name, array $data = array())
     {
+        $content = $this->getOutput($name, $data);
+        return $this->getOutput(__DIR__ . '/../../templates/layouts/layout.phtml', array('content' => $content));
+    }
+
+    protected function getOutput($name, $data = array())
+    {
         $this->templateName = $name;
         extract($data);
         ob_start();
-        include $this->pathTemplates . "/$this->templateName.phtml";
-        $saida = ob_get_clean();
-        return $saida;
+        if (!file_exists($this->templateName)) {
+            include $this->pathTemplates . "/{$this->templateName}.phtml";
+        } else {
+            include $this->templateName;
+        }
+        $output = ob_get_clean();
+        return $output;
     }
 
 }
