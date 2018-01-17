@@ -27,16 +27,16 @@ $app->get('/hello-world', function(Silex\Application $app) {
 });
 
 $app->get('/home', function() use($app) {
-    return $app['view.renderer']->render('home', array());
+    return $app['view.renderer']->render('home');
 });
 
 $app->post('/get-name/{parametro1}/{parametro2}', function(Request $request, Silex\Application $app, $parametro2, $parametro1) {
-    echo $app['valor'] . "<br>";
     $name = $request->get('nome');
-    ob_start();
-    include __DIR__ . '/../templates/get-name.phtml';
-    $saida = ob_get_clean();
-    return $saida;
+    return $app['view.renderer']->render('get-name', array(
+                'name' => $name,
+                'parametro1' => $parametro1,
+                'parametro2' => $parametro2
+    ));
 });
 
 $app->run();
