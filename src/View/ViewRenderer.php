@@ -16,7 +16,8 @@ class ViewRenderer
     public function render($name, array $data = array())
     {
         $content = $this->getOutput($name, $data);
-        return $this->getOutput(__DIR__ . '/../../templates/layouts/layout.phtml', array('content' => $content));
+        $layout = __DIR__ . '/../../templates/layouts/layout.phtml';
+        return $this->getOutput($layout, array('content' => $content));
     }
 
     protected function getOutput($name, $data = array())
