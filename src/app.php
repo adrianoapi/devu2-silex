@@ -19,10 +19,6 @@ $app['date_time'] = function() {
     return new \DateTime();
 };
 
-$app->get('/', function(){
-     header('Location: /home'); 
-});
-
 $app->get('/hello-world', function(Silex\Application $app) {
     echo $app['date_time']->format(\DateTime::W3C);
     echo "<br/>";

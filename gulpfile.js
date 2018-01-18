@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const browserSync = require('browser-sync').create();
 const less = require('gulp-less');
+const del = require('del');
 
 let DIR = {
     less: './assets/less',
@@ -10,8 +11,12 @@ let DIR = {
 DIR.build_css = `${DIR.build}/css`;
 DIR.build_js = `${DIR.build}/js`;
 
-gulp.task('browser-sync',function(){
-    browserSync.init({
+gulp.task('clean', function(){
+   del.sync([DIR.build]);
+});
+
+gulp.task('browser-sync', function(){
+   browserSync.init({
         proxy: "localhost",
         port: 8080,
         files: [
@@ -20,7 +25,7 @@ gulp.task('browser-sync',function(){
             "templates/**/*.phtml",
             `${DIR.build_css}/**/*.css`
         ]
-    })
+   })
 });
 
 gulp.task('less',function(){
@@ -40,4 +45,4 @@ gulp.task('watch', function(){
    gulp.watch([`${DIR.less}/**/*.less`], ['less']);
 });
 
-gulp.task('dev', ['watch','scripts','less', 'browser-sync']);
+gulp.task('dev', ['clean','watch','scripts','less', 'browser-sync']);
