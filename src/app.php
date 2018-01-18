@@ -65,6 +65,14 @@ $app->get('/posts', function() use($app) {
     return $app['view.renderer']->render('/posts/list', array("posts" => $posts));
 });
 
+$app->get('/posts/edit/{id}', function($id)use($app) {
+    /** @var \Doctrine\DBAL\Connection $db */
+    $db = $app['db'];
+    $sql = "SELECT * FROM posts WHERE id = ?;";
+    $post = $db->fetchAssoc($sql, array($id));
+    return $app['view.renderer']->render('posts/edit', array('post' => $post));
+});
+
 $app->get('/home', function() use($app) {
     dump($app);
     return $app['view.renderer']->render('home');
