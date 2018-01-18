@@ -38,6 +38,25 @@ $app->get('/create-table', function (Silex\Application $app) {
     return "Tabelas criadas";
 });
 
+$app->get('/',function()use($app){
+    return $app->redirect('/home');
+});
+
+$app->get('/posts/create', function () use ($app) {
+    return $app['view.renderer']->render('posts/create');
+});
+
+$app->post('/posts/create', function(Request $request) use($app) {
+    /** @var \Doctrine\DBAL\Connection $db */
+    $db = $app['db'];
+    $data = $request->request->all();
+    $db->insert('posts', array(
+        'title' => $data['title'],
+        'content' => $data['content']
+    ));
+    return $app->redirect('/posts/create');
+});
+
 $app->get('/home', function() use($app) {
     dump($app);
     return $app['view.renderer']->render('home');
