@@ -5,10 +5,20 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
-
+$app['debug'] = true;
 $app['view.config'] = [
     'path_templates' => __DIR__ . '/../templates'
 ];
+
+$app->register(new Silex\Provider\DoctrineServiceProvider(), array(
+    'db.options' => array(
+        'driver' => 'pdo_mysql',
+        'host' => 'localhost',
+        'dbname' => 'db_silex',
+        'user' => 'root',
+        'pass' => '',
+    ),
+));
 
 $app['view.renderer'] = function() use($app) {
     $pathTemplates = $app['view.config']['path_templates'];
@@ -19,15 +29,17 @@ $app['date_time'] = function() {
     return new \DateTime();
 };
 
-$app->get('/hello-world', function(Silex\Application $app) {
-    echo $app['date_time']->format(\DateTime::W3C);
-    echo "<br/>";
-    sleep(10);
-    echo $app['date_time']->format(\DateTime::W3C);
-    return "Hello world " . $app['valor'];
+$app->get('/create-table', function (Silex\Application $app) {
+    $file = fopen(__DIR__ . '/../data/schema.sql', 'r');
+    while ($line = fread($file, 4096)) {
+        $app['db']->executeQuery($line);
+    }
+    fclose($file);
+    return "Tabelas criadas";
 });
 
 $app->get('/home', function() use($app) {
+    dump($app);
     return $app['view.renderer']->render('home');
 });
 

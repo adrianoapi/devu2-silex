@@ -1,6 +1,8 @@
 {
     "require": {
-        "silex/silex": "~2.0"
+        "silex/silex": "~2.0",
+        "symfony/var-dumper": "^3.4",
+        "doctrine/dbal": "~2.2"
     },
     "autoload": {
         "psr-4": {
