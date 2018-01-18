@@ -38,7 +38,7 @@ $app->get('/create-table', function (Silex\Application $app) {
     return "Tabelas criadas";
 });
 
-$app->get('/',function()use($app){
+$app->get('/', function()use($app) {
     return $app->redirect('/home');
 });
 
@@ -55,6 +55,14 @@ $app->post('/posts/create', function(Request $request) use($app) {
         'content' => $data['content']
     ));
     return $app->redirect('/posts/create');
+});
+
+$app->get('/posts', function() use($app) {
+    /** @var \Doctrine\DBAL\Connection $db */
+    $db = $app['db'];
+    $sql = "SELECT * FROM posts;";
+    $posts = $db->fetchAll($sql);
+    return $app['view.renderer']->render('/posts/list', array("posts" => $posts));
 });
 
 $app->get('/home', function() use($app) {
