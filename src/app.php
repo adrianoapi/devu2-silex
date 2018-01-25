@@ -96,6 +96,11 @@ $app->post('/posts/edit/{id}', function(Request $request, $id) use($app) {
 $app->get('/posts/delete/{id}', function($id) use($app) {
     /** @var \Doctrine\DBAL\Connection $db */
     $db = $app['db'];
+     $sql = "SELECT * FROM posts WHERE id = ?;";
+    $post = $db->fetchAssoc($sql, array($id));
+    if (!$post) {
+        $app->abort(404, "Post não encontrado!");
+    }
     $db->delete('posts', array('id' => $id));
     return $app->redirect('/posts');
 });
