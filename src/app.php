@@ -73,19 +73,15 @@ $app->get('/posts/edit/{id}', function($id)use($app) {
     return $app['view.renderer']->render('posts/edit', array('post' => $post));
 });
 
-$app->get('/posts/edit/{id}', function(Request $request, $id)use($app) {
+$app->post('/posts/edit/{id}', function(Request $request, $id) use($app) {
     /** @var \Doctrine\DBAL\Connection $db */
     $db = $app['db'];
     $data = $request->request->all();
-    $db->update(
-            'posts', [
+    $db->update('posts', array(
         'title' => $data['title'],
         'content' => $data['content']
-            ]
-    );
-    $sql = "SELECT * FROM posts WHERE id = ?;";
-    $post = $db->fetchAssoc($sql, array($id));
-    return $app['view.renderer']->render('posts/edit', array('post' => $post));
+    ), array('id' => $id));
+    return $app->redirect('/posts');
 });
 
 $app->get('/home', function() use($app) {
