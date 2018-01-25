@@ -70,7 +70,7 @@ $app->get('/posts/edit/{id}', function($id)use($app) {
     $db = $app['db'];
     $sql = "SELECT * FROM posts WHERE id = ?;";
     $post = $db->fetchAssoc($sql, array($id));
-    if(!$post){
+    if (!$post) {
         $app->abort(404, "Post não encontrado!");
     }
     return $app['view.renderer']->render('posts/edit', array('post' => $post));
@@ -107,6 +107,15 @@ $app->post('/get-name/{parametro1}/{parametro2}', function(Request $request, Sil
                 'parametro1' => $parametro1,
                 'parametro2' => $parametro2
     ));
+});
+
+$app->error(function(\Exception $e, Request $request, $code) use($app) {
+    switch ($code) {
+        case 404:
+            return $app['view.renderer']->render('errors/404', array(
+                        'message' => $e->getMessage()
+            ));
+    }
 });
 
 $app->run();
