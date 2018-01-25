@@ -54,7 +54,7 @@ $app->post('/posts/create', function(Request $request) use($app) {
         'title' => $data['title'],
         'content' => $data['content']
     ));
-    return $app->redirect('/posts/create');
+    return $app->redirect('/posts');
 });
 
 $app->get('/posts', function() use($app) {
@@ -80,9 +80,17 @@ $app->post('/posts/edit/{id}', function(Request $request, $id) use($app) {
     $db->update('posts', array(
         'title' => $data['title'],
         'content' => $data['content']
-    ), array('id' => $id));
+            ), array('id' => $id));
     return $app->redirect('/posts');
 });
+
+$app->get('/posts/delete/{id}', function($id) use($app) {
+    /** @var \Doctrine\DBAL\Connection $db */
+    $db = $app['db'];
+    $db->delete('posts', array('id' => $id));
+    return $app->redirect('/posts');
+});
+
 
 $app->get('/home', function() use($app) {
     dump($app);
