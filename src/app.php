@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
-$app['debug'] = true;
+$app['debug'] = false;
 $app['view.config'] = [
     'path_templates' => __DIR__ . '/../templates'
 ];
@@ -70,6 +70,9 @@ $app->get('/posts/edit/{id}', function($id)use($app) {
     $db = $app['db'];
     $sql = "SELECT * FROM posts WHERE id = ?;";
     $post = $db->fetchAssoc($sql, array($id));
+    if(!$post){
+        $app->abort(404, "Post não encontrado!");
+    }
     return $app['view.renderer']->render('posts/edit', array('post' => $post));
 });
 
