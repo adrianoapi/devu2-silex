@@ -79,6 +79,12 @@ $app->get('/posts/edit/{id}', function($id)use($app) {
 $app->post('/posts/edit/{id}', function(Request $request, $id) use($app) {
     /** @var \Doctrine\DBAL\Connection $db */
     $db = $app['db'];
+    // Chea existência do post
+    $sql = "SELECT * FROM posts WHERE id = ?;";
+    $post = $db->fetchAssoc($sql, array($id));
+    if (!$post) {
+        $app->abort(404, "Post não encontrado!");
+    }
     $data = $request->request->all();
     $db->update('posts', array(
         'title' => $data['title'],
