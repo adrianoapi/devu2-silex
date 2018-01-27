@@ -1,5 +1,7 @@
 <?php
 
+use Symfony\Component\HttpFoundation\Request;
+
 $post = $app['controllers_factory'];
 $post->get('/create', function () use ($app) {
     return $app['view.renderer']->render('posts/create');
@@ -13,7 +15,7 @@ $post->post('/create', function(Request $request) use($app) {
         'title' => $data['title'],
         'content' => $data['content']
     ));
-    return $app->redirect('/posts');
+    return $app->redirect('/admin/posts');
 });
 
 $post->get('/', function() use($app) {
@@ -49,7 +51,7 @@ $post->post('/edit/{id}', function(Request $request, $id) use($app) {
         'title' => $data['title'],
         'content' => $data['content']
             ), array('id' => $id));
-    return $app->redirect('/posts');
+    return $app->redirect('/admin/posts');
 });
 
 $post->get('/delete/{id}', function($id) use($app) {
@@ -61,7 +63,7 @@ $post->get('/delete/{id}', function($id) use($app) {
         $app->abort(404, "Post não encontrado!");
     }
     $db->delete('posts', array('id' => $id));
-    return $app->redirect('/posts');
+    return $app->redirect('/admin/posts');
 });
 
 

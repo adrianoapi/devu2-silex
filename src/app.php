@@ -42,8 +42,12 @@ $app->get('/', function()use($app) {
     return $app->redirect('/home');
 });
 
-$post = include __DIR__ . '/controllers/posts.php';
-$app->mount('posts', $post);
+$site = include __DIR__ . '/controllers/site.php';
+$app->mount('/', $site);
+$app->mount('/admin', function($admin) use($app) {
+    $post = include __DIR__ . '/controllers/posts.php';
+    $admin->mount('/posts', $post);
+});
 
 $app->error(function(\Exception $e, Request $request, $code) use($app) {
     switch ($code) {
